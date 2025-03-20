@@ -4,4 +4,3 @@ python-box
 sentence-transformers
 streamlit
 transformers
-uviron
