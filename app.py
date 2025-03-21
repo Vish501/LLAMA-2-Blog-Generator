@@ -1,18 +1,31 @@
 import streamlit as st
 
 from langchain.prompts import PromptTemplate
-from langchain.llms import ctransformers
 from transformers import AutoModel
 
 
 class GetBlogModel:
     def __init__(self, model_id):
-        self.llm = AutoModel.from_pretrained(model_id)
+        self.llm = AutoModel.from_pretrained(model=model_id,
+                                             config={"max_new_tokens": 256,
+                                                     "temperature": 0.01})
+
+    def getResponse(self, blog_topic, blog_style, blog_len):
+        template = """
+                    You are a blog writer. Please write me a blog on the 
+                    topic {blog_topic} for {blog_style}, with a minimum 
+                    word count of {blog_len}
+                    """
+        
+        prompt = PromptTemplate(input_variables=["topic", "style", "length"],
+                                template=template)
+        
+        return self.llm(prompt.format(topic=blog_topic, style=blog_style, length=blog_len))
     
 
 def main():
     # Initializing llm model for blog generation
-    blog_ai = GetBlogModel("TheBloke/Llama-2-7B-Chat-GGML")
+    blog_generator = GetBlogModel("TheBloke/Llama-2-7B-Chat-GGML")
 
     # Configuring app landing page
     st.set_page_config(page_title="Blog Generator 9000",
@@ -24,14 +37,15 @@ def main():
     st.head("Blog Generator 9000 📓")
 
     # Getting topic, len of blog, and blog style from user
-    topic = st.text_input("Topic")
+    blog_topic = st.text_input("Topic")
     col1, col2 = st.columns([5,5])
-    with col1: lenght = st.text_input("Desired Length of the Blog")
-    with col2: style = st.selectbox("Blog Style", ("Casual Reader", "Engineers", "Researchers"))
+    with col1: blog_len = st.text_input("Desired Length of the Blog")
+    with col2: blog_style = st.selectbox("Blog Style", ("Casual Reader", "Engineers", "Researchers"))
 
-    submit = st.button("Generate Blog")
+    # Getting respose from the LLM model
+    if st.button("Generate Blog"):
+       st.write(blog_generator.getResponse(blog_topic, blog_style, blog_len))
 
-    
 
 if __name__ == "__main__":
     main()
