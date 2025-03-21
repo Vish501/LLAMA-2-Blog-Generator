@@ -4,9 +4,9 @@ from langchain.prompts import PromptTemplate
 from transformers import AutoModel
 
 
-class GetBlogModel:
+class GetBlogModel():
     def __init__(self, model_id):
-        self.llm = AutoModel.from_pretrained(model=model_id,
+        self.llm = AutoModel.from_pretrained(pretrained_model_name_or_path=model_id,
                                              config={"max_new_tokens": 256,
                                                      "temperature": 0.01})
 
