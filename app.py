@@ -36,7 +36,7 @@ def main():
                        initial_sidebar_state="collapsed")
 
     # Setting title of the page
-    st.head("Blog Generator 9000 📓")
+    st.header("Blog Generator 9000 📓")
 
     # Getting topic, len of blog, and blog style from user
     blog_topic = st.text_input("Topic")
