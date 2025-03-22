@@ -1,4 +1,6 @@
+ctransformers
 langchain
+langchain_community
 python-box
 sentence-transformers
 streamlit
