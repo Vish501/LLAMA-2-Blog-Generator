@@ -1,14 +1,16 @@
 import streamlit as st
 
 from langchain.prompts import PromptTemplate
-from transformers import AutoModel
+from langchain.llms import ctransformers
 
 
 class GetBlogModel():
-    def __init__(self, model_id):
-        self.llm = AutoModel.from_pretrained(pretrained_model_name_or_path=model_id,
-                                             config={"max_new_tokens": 256,
-                                                     "temperature": 0.01})
+    def __init__(self):
+        self.llm = ctransformers(model="models/llama-2-7b-chat.ggmlv3.q8_0.bin",
+                                model_type='llama',
+                                config={"max_new_tokens": 256,
+                                        "temperature": 0.01})
+
 
     def getResponse(self, blog_topic, blog_style, blog_len):
         template = """
@@ -25,7 +27,7 @@ class GetBlogModel():
 
 def main():
     # Initializing llm model for blog generation
-    blog_generator = GetBlogModel("TheBloke/Llama-2-7B-Chat-GGML")
+    blog_generator = GetBlogModel()
 
     # Configuring app landing page
     st.set_page_config(page_title="Blog Generator 9000",
